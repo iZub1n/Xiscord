@@ -132,3 +132,6 @@ def sendMessage(data, timestamp):
 
     emit("announce message", {'user': session.get('user'), 'timestamp': timestamp, 'message': message}, room=room)
     
+
+if __name__ == "__main__":
+    app.run
