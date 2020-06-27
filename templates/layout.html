@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='functionsUniversal.js')}}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <title>{% block Title %} Xiscord - Chat Page - {{dname}} {% endblock %}</title>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                document.querySelector('#addChannel').disabled = true;
+                document.querySelector('#newChannelName').onkeyup = () =>{
+                if (document.querySelector('#newChannelName').value.trim().length > 0)
+                    document.querySelector('#addChannel').disabled = false;
+                else
+                    document.querySelector('#addChannel').disabled = true;
+                };
+
+                document.querySelector('#addChannel').onclick = ()  => {
+                        closeForm();
+                    }
+
+            });
+                
+        </script>
+
+        <div class="container-fluid, alertBar" style="background-color: #111; opacity: 0.9;">
+            <h6>  _ {{alert}} </h6>
+        </div>
+        {% block scripts %}
+      {% endblock scripts %}
+</head>
+<body style="background-color:  #b0c4de;">
+
+    <div class="sidenav">
+        <h4 style="position: absolute; top: 10px; margin-left: 10px; color: rgb(175, 171, 171); margin-top: 5px;">Channels</h4>
+        <h6 class="dNameNB" id="dNameNB" style="position: absolute; bottom: 35px;">{{dname}}</h6>
+        <button class="addChannelClass"id="open" onclick="openForm()">+</button>
+        <div class="channelView">
+        <ul id="channelBar" class="navbar-nav">
+            {% for channel in channels %}
+                <li class="nav-item">
+                    <a href="/chat/{{ channel }}"> #
+                        {{ channel }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+        <div class="form-popup" id="addCForm">
+            <button name="action" value="cancel" id="closeBtn" class='cancel' onclick="closeForm()" style="position: absolute; right: 5px;">X</button>
+            <form action="{{ url_for('create') }}" method="POST" class="form-container">
+                <h5>Channel Name</h5>
+                <input name="newChannelName" id="newChannelName" type="text" placeholder="Enter a Channel Name">
+                <div>
+                    <button name="action" value="addChannel" id="addChannel" style="text-align: left;">Add Channel</button>
+                </div>
+
+            </form>
+          </div>
+      </div>
+      
+      <div class="main">
+      {% block content %}
+      {% endblock %}
+    </div>
+</body>
+</html>

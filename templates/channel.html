@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+<script>
+    if (localStorage.getItem('last_channel')) 
+    {
+        let channel = localStorage.getItem('last_channel'); 
+        console.log(channel);
+        window.location.replace('/chat/' + channel);   
+    }
+</script>
+
+{% endblock scripts %}
+
+{% block content %}
+{% endblock %}
+
+
+

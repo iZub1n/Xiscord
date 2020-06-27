@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <title>Xiscord</title>
+
+    <script>
+
+      
+        document.addEventListener('DOMContentLoaded', function()
+        {
+            document.body.style.background = randomBackgroundColor();
+        });
+         
+        function randomBackgroundColor()
+        {
+            var pastelColorsArrays = ['#ffb3ba', '#ffdfba', '#ffffba', '#baffc9',  	'#bae1ff'];
+            let rC = pastelColorsArrays[Math.floor(Math.random()*pastelColorsArrays.length)];
+            document.body.style.backgroundColor = rC
+        }
+
+        function reg()
+        {
+            let dispName = document.querySelector("#displayName").value;
+            if (dispName==""|| dispName==null || dispName.trim()==""){
+                raiseWar();
+                return false;
+            }
+            localStorage.setItem('dName',dispName.trim());
+        }
+
+        function raiseWar()
+        {
+                document.querySelector('.alertBar').innerHTML="Display Name is Empty";
+        }
+  
+    </script>
+</head>
+<header class="alertBar">{{alert}}</header>
+<body id="rBCol">
+    <h1 class="text-center">Xiscord</h1>
+    <div class="vertical-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <form action="{{ url_for('login') }}" method="POST" onsubmit="return reg()">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="displayName" id="displayName" placeholder="Display Name">
+                    </div>
+                    <button id="button" type="Enter!" class="btn btn-primary">Submit</button>
+                  </form>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

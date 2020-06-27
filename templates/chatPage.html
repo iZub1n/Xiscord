@@ -1,0 +1,68 @@
+
+{% extends "layout.html" %}
+
+
+{% block scripts %}
+    <script type="text/javascript" src="{{url_for('static', filename='chatFunctions.js')}}"></script>
+    <script id="messageTemplate" type="text/x-handlebars-template">
+        <div class="messageTemplate">
+            {% raw -%}
+                {{ breaklines contents }}
+            {% endraw %}
+        </div>
+    </script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChannelMessages();
+            window.scrollTo(0,document.querySelector('#messageView').scrollHeight);
+    });
+
+            function loadChannelMessages() {
+                let cname = {{ cname|tojson }};
+                localStorage.setItem('last_channel', cname)
+                let myUrl = "{{ url_for('loadChannelMessages', channel=cname) }}";
+
+                const request = new XMLHttpRequest();
+                request.open('POST', myUrl);
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText);
+                    data.forEach(add_message);
+                };
+                request.send();
+                }
+
+            const message_template = Handlebars.compile(document.querySelector('#messageTemplate').innerHTML);
+
+            function add_message(contents) {
+                let messFormat = contents[2]+"\n"+contents[1]+"______"+contents[0]
+                const mess = message_template({'contents': messFormat});
+                document.querySelector('#messageView').innerHTML+=mess;
+            }
+
+            Handlebars.registerHelper('breaklines', function(text) {
+                text = Handlebars.Utils.escapeExpression(text);
+                text = text.replace(/(\r\n|\n|\r)/, '<br>');
+                return new Handlebars.SafeString(text);
+            });
+    </script>
+
+{% endblock scripts %}
+
+{% block content %}
+
+<div>
+    <h1># {{cname}}</h1>
+    <div class="messageView" id="messageView"></div>
+
+    <div class="sideArea">
+        <div class="inputMess">
+            <input style="border-radius: 15px; margin-left: 8px;" id="messageField" style="width: 100%;" class="form-control" type="text" placeholder="Message" >
+        </div>
+        <div class="sendMess">
+            <button style="width: 50px; border-radius: 15px;" id="sendMsg" class="btn btn-dark">&#9992;</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
